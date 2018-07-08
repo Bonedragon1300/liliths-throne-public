@@ -2641,22 +2641,16 @@ public class Lab {
 		public Response getResponse(int responseTab, int index) {
 			if (index == 1) {
 				switch(Main.game.getPlayer().getVaginaType()) {
+					case ALLIGATOR_MORPH:
 					case HARPY:
-						return new Response("Follow Lilaya", "Allow Lilaya to lead you up to your room.", LILAYA_ASSISTS_EGG_LAYING) {
+						return new Response("Follow Lilaya", "Allow Lilaya to lead you up to your room.", LILAYA_ASSISTS_EGG_LAYING_HARPY) {
 							@Override
 							public void effects() {
 								Main.game.getLilaya().setLocation(WorldType.LILAYAS_HOUSE_FIRST_FLOOR, PlaceType.LILAYA_HOME_ROOM_PLAYER, false);
 								Main.game.getPlayer().setLocation(WorldType.LILAYAS_HOUSE_FIRST_FLOOR, PlaceType.LILAYA_HOME_ROOM_PLAYER, false);
 							}
 						};
-					case GATOR:
-						return new Response("Follow Lilaya", "Allow Lilaya to lead you up to your room.", LILAYA_ASSISTS_EGG_LAYING) {
-							@Override
-							public void effects() {
-								Main.game.getLilaya().setLocation(WorldType.LILAYAS_HOUSE_FIRST_FLOOR, PlaceType.LILAYA_HOME_ROOM_PLAYER, false);
-								Main.game.getPlayer().setLocation(WorldType.LILAYAS_HOUSE_FIRST_FLOOR, PlaceType.LILAYA_HOME_ROOM_PLAYER, false);
-							}
-						};
+					
 					default:
 						return new Response("Follow Lilaya", "Allow Lilaya to lead you to the birthing room.", LILAYA_ASSISTS_BIRTHING) {
 							@Override
@@ -2953,7 +2947,9 @@ public class Lab {
 		@Override
 		public Response getResponse(int responseTab, int index) {
 			if (index == 1) {
-				return new Response("Lay eggs", "Tell Lilaya that you're ready to lay your eggs now.", LILAYA_ASSISTS_EGG_LAYING_DELIVERS){
+		switch(Main.game.getPlayer().getVaginaType()){
+    			case ALLIGATOR_MORPH:	
+				return new Response("Lay eggs", "Tell Lilaya that you're ready to lay your eggs now.", LILAYA_ASSISTS_EGG_LAYING_DELIVERS_HARPY){
 					@Override
 					public void effects() {
 						Main.game.getDialogueFlags().values.remove(DialogueFlagValue.reactedToPregnancyLilaya);
@@ -2966,6 +2962,24 @@ public class Lab {
 									(Main.game.getPlayer().getVaginaStretchedCapacity()-Main.game.getPlayer().getVaginaRawCapacityValue())*Main.game.getPlayer().getVaginaPlasticity().getCapacityIncreaseModifier(),
 									false);
 						}
+			
+					}
+				};
+			case HARPY:
+			        return new Response("Lay eggs", "Tell Lilaya that you're ready to lay your eggs now.", LILAYA_ASSISTS_EGG_LAYING_DELIVERS_HARPY){
+					@Override
+					public void effects() {
+						Main.game.getDialogueFlags().values.remove(DialogueFlagValue.reactedToPregnancyLilaya);
+						Main.game.getPlayer().endPregnancy(true);
+						Main.game.getPlayer().setMana(0);
+
+						if(Main.game.getPlayer().getBodyMaterial()!=BodyMaterial.SLIME) {
+							Main.game.getPlayer().incrementVaginaStretchedCapacity(15);
+							Main.game.getPlayer().incrementVaginaCapacity(
+									(Main.game.getPlayer().getVaginaStretchedCapacity()-Main.game.getPlayer().getVaginaRawCapacityValue())*Main.game.getPlayer().getVaginaPlasticity().getCapacityIncreaseModifier(),
+									false);
+						}
+			
 					}
 				};
 
@@ -2975,7 +2989,7 @@ public class Lab {
 		}
 	};
 	
-	public static final DialogueNodeOld LILAYA_ASSISTS_EGG_LAYING_DELIVERS = new DialogueNodeOld("", "", true, true) {
+	public static final DialogueNodeOld LILAYA_ASSISTS_EGG_LAYING_DELIVERS_HARPY = new DialogueNodeOld("", "", true, true) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -3009,6 +3023,56 @@ public class Lab {
 						+ "[pc.speech(I-I did it,)]"
 						+ " you sigh, looking down at the egg you've just laid."
 						+ " It looks to be about the same size as an emu's egg, and as you marvel at its pale pink colouring and smooth shell, you feel yourself subconsciously reaching out to pick it up and cradle in your arms."
+					+ "</p>"
+						
+					+ "<p>"
+						+ "[lilaya.speech(Good [pc.girl], [pc.name]! But wait, just leave it for a moment, you've still got more to lay!)]"
+						+ " Lilaya pulls you back into her, continuing to apply the gentle pressure on your stomach as she makes soothing shushing noises into your ear."
+					+ "</p>"
+						
+					+ "<p>"
+						+ "Doing as Lilaya says, you allow her to pull you back, but as she does so, a strange feeling suddenly washes over you,"
+							+ " and it takes all of your willpower to prevent yourself from pushing Lilaya away and attempting to grab your egg."
+						+ " Almost as though she sensed what you were thinking, Lilaya reminds you to try and overcome your maternal instincts, at least until you've finished laying all your eggs."
+						+ " After promising to do your best, you set about pushing out the rest of your eggs, and within half an hour, a complete clutch of "
+							+Util.intToString(Main.game.getPlayer().getLastLitterBirthed().getTotalLitterCount())+" eggs lie between your legs."
+					+ "</p>";
+		}
+		
+	public static final DialogueNodeOld LILAYA_ASSISTS_EGG_LAYING_DELIVERS_ALLIGATOR = new DialogueNodeOld("", "", true, true) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public String getContent() {
+			return "<p>"
+						+ "You nod as you look down at Lilaya's hands resting on your swollen stomach. "
+						+ "[pc.speech(I'm ready...)]"
+					+ "</p>"
+
+					+ "<p>"
+						+ "[lilaya.speech(Right, just try and relax...)]"
+						+ " she whispers into your ear, and as she does so, you see a soft pink glow start to run down her arms."
+					+ "</p>"
+
+					+ "<p>"
+						+ "Sliding her hands up and down over your pregnant belly, you feel her start to apply a gentle pressure with her thumbs, as though she's trying to push out the eggs within you."
+						+ " As she does this, you start to feel an intense pressure building up deep within your vagina, and, collapsing back into Lilaya, you spread your legs and let out a desperate whine."
+					+ "</p>"
+						
+					+ "<p>"
+						+ "[lilaya.speech(That's right, now push... Go on, you can do it...)]"
+						+ " Lilaya softly speaks into your ear, and, obeying her instructions, you try to push the pressure out from between your legs."
+					+ "</p>"
+					
+					+ "<p>"
+						+ "Looking down, you see the tip of your first egg peeking out from between your legs, and with a determined cry, you push with all your might."
+						+ " You feel the egg stretching you out as you continue to apply pressure, but just as you feel that you can't keep going any longer, the egg pops free and slides out onto the bed beneath you."
+					+ "</p>"
+						
+					+ "<p>"
+						+ "[pc.speech(I-I did it,)]"
+						+ " you sigh, looking down at the egg you've just laid."
+						+ " It looks to be about the same size as a kiwi's egg, and as you marvel at its pale yellow colouring and smooth shell, you feel yourself subconsciously reaching out to pick it up and cradle in your arms."
 					+ "</p>"
 						
 					+ "<p>"
